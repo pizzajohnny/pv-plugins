@@ -5,8 +5,12 @@ async ({$log, $moment, $fs, actorName}) => {
     $log('Trying to get pg json data for ' + actorName);
     const promisifiedFs = util.promisify($fs.readFile);
 
-    // edit this path 
-    const jsonFilePath = "D:\\Programme\\pm.smoke-test\\pornstars.json"
+    /* edit this path 
+    /* example path on Linux: "/home/user/porn/pornstars.json"
+    /* example path on Windows: "D:\porn\pornstars.json"
+    /* Windows paths need an extra backslash to work, e.g: "D:\\porn\\pornstars.json" */
+    const jsonFilePath = "D:\\porn\\pornstars.json"
+
     const jsonFileContent = await promisifiedFs(jsonFilePath);
   
     const jsonData = JSON.parse(jsonFileContent);
@@ -18,7 +22,7 @@ async ({$log, $moment, $fs, actorName}) => {
         return {}
     }
 
-    // the key values such as breast_size have to match the names in porn-manager
+    // the key values such as "breast_size" have to match the custom field name in porn-manager
     const customFields = {
         breast_size: actor.breast_size,
         butt_size: actor.butt_size,
