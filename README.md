@@ -6,7 +6,7 @@ This repo provides plugins for `porn-manager`.
 # Current plugins
 
  - `pg-actor-import` - plugin for converting `Pornganizer`s pornstars.json into matching `CustomField`s of `porn-manager`.
- - `ytdl-scene-parser` - metadata parser for `yt-dl` generated metadata jsons.
+ - `ytdl-json-parser` - metadata parser for `yt-dl` generated metadata jsons.
 
 # pg-actor-import
 This plugins makes excessive use of porn-manager's 'arguments' feature. These arguments must be provided, otherwise the plugin will not work. It also supports dynamic linking between custom fields and Pornganizer fields.
