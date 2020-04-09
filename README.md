@@ -1,5 +1,3 @@
-# Welcome to StackEdit!
-
 This repo provides plugins for `porn-manager`. 
 
 
