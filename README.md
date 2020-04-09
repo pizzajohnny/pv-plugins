@@ -36,7 +36,7 @@ PLUGINS:
   pornganizer-plugin:
     path: ./plugins/pg-actor.import.js
     args: 
-        pornstarFilePath: ./pg-actor-import/pg-pornstars.json
+        pornstarFilePath: ./plugins/pg-actor-import/pg-pornstars.json
         keyFilePath: ./plugins/pg-actor-import/keys.json
         verboseLog: false
 ```
