@@ -25,7 +25,7 @@ Example (`config.json`):
       "args": {
 	    "pornstarFilePath": "./pg-actor-import/pg-pornstars.json",
 	    "keyFilePath": "./plugins/pg-actor-import/keys.json",
-        "verboseLog": false
+            "verboseLog": false
       }
     }
   }
@@ -47,6 +47,7 @@ File paths must adjusted according to your setup.
 ## Key mapping in `keys.json`
 
 The `keys.json` in responsible for the mapping between your own `CustomField`s in porn-manager and the fields in your `pornstar.json`. The file consists of two `JSON` objects.  One object for porn-manager `CustomFieldBoth`, one object for your `pornstar.json`. 
+
 Both objects need to have the same objects keys. The value of the `CustomField` object key must match your `CustomField` name. The value of the `pornstars.json` object key must match the object key name in the `pornstar.json`.
 
 Example (CustomField in porn-manager):
