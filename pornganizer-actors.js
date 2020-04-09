@@ -1,49 +1,85 @@
 const util = require('util');
 
-async ({$log, $moment, $fs, actorName}) => {
+async ({args, $log, $moment, $fs, actorName}) => {
 
-    $log('Trying to get pg json data for ' + actorName);
+    if(args === undefined) {
+      $log("No arguments provided!");
+      return { }
+    }
+    $log(`verbose log enabled: ${args.verboseLog}`);
+    $log('Trying to get data from pornganizer json for ' + actorName);
     const promisifiedFs = util.promisify($fs.readFile);
 
-    /* edit this path 
-    /* example path on Linux: "/home/user/porn/pornstars.json"
-    /* example path on Windows: "D:\porn\pornstars.json"
-    /* Windows paths need an extra backslash to work, e.g: "D:\\porn\\pornstars.json" */
-    const jsonFilePath = "D:\\porn\\pornstars.json"
+    const pornstarFilePath = args.pornstarFilePath;
+    const keyFilePath = args.keyFilePath;
 
-    const jsonFileContent = await promisifiedFs(jsonFilePath);
-  
-    const jsonData = JSON.parse(jsonFileContent);
+    $log(`pornstarFilePath: ${pornstarFilePath}`)
+    $log(`keyFilePath: ${keyFilePath}`)
 
-    const actor = jsonData.find(actor => actor.name.includes(actorName));
+    const actorJson = await promisifiedFs(pornstarFilePath);
+    const keyFileJson = await promisifiedFs(keyFilePath);
+
+    const actorData = JSON.parse(actorJson);
+    const keys = JSON.parse(keyFileJson);
+    const customFieldKeys = keys.customFieldKeys;
+    const pornganizerKeys = keys.pornganizerKeys;
+
+    if(1==2) {
+      $log("Keys for CustomFields and / or Pornganizer are missing!")
+      return { }
+    }
+
+    if(args.verboseLog) {
+      $log("keys");
+      $log(keys);
+      $log("customFieldKeys");
+      $log(customFieldKeys);
+      $log("pornganizerKeys");
+      $log(pornganizerKeys);
+    }
+
+    const actor = actorData.find(actor => actor[pornganizerKeys.name].includes(actorName));
+    if(args.verboseLog)
+      $log(actor);
 
     if(actor === undefined) {
-        $log('No actor found..')
+        $log('No actor found..');
         return {}
-    }
-
-    // the key values such as "breast_size" have to match the custom field name in porn-manager
-    const customFields = {
-        breast_size: actor.breast_size,
-        butt_size: actor.butt_size,
-        ethnicity: actor.ethnicity,
-        eye_color: actor.eye_color,
-        hair_color: actor.hair_color,
-        height_metric: actor.height_metric,
-        nationality: actor.nationality,
-        waist_size: actor.waist_size,
-        weight_metric: actor.Weight_metric
-    }
+    }    
     
-    const birthDate = $moment(actor.birth_date);
+    let customFields = new Object();
+    for(let customKey in customFieldKeys) {
+      if(args.verboseLog)
+        $log(`customKey: ${customKey}`);
 
-    $log(`name: ${actor.name}, birthDate: ${actor.birth_date}`)
-    $log(customFields)
+      for(let pornganizerKey in pornganizerKeys) {
+        if(args.verboseLog)
+          $log(`pornganizerKey: ${pornganizerKey}`);
+
+        if(customKey === pornganizerKey) {
+          if(args.verboseLog)
+            console.log(`match! ${customKey} - ${pornganizerKey}`);
+
+          const actorValue = actor[pornganizerKeys[pornganizerKey]];
+
+          if(args.verboseLog)
+            console.log(`actor value ${actorValue}`);
+          
+          customFields[customKey] = actorValue;
+          break;
+        }
+      }
+    }
+
+    const birthDate = $moment(actor[pornganizerKeys.birthDate]);
+
+    $log(`name: ${actor[pornganizerKeys.name]}, birthDate: ${actor[pornganizerKeys.birthDate]}`);
+    $log(customFields);
 
     return {
       bornOn: birthDate.valueOf(),
-      description: actor.description,
+      description: actor[pornganizerKeys.description],
       custom: customFields,
-      name: actor.name
+      name: actor[pornganizerKeys.name]
     }
   }
