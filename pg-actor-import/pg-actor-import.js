@@ -1,6 +1,6 @@
 const util = require('util');
 
-async ({args, $log, $moment, $fs, actorName}) => {
+module.exports = async ({args, $log, $moment, $fs, actorName}) => {
 
     if(args === undefined) {
       $log("No arguments provided!");
