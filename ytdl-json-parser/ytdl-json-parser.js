@@ -1,6 +1,6 @@
 const util = require('util');
 
-async ({$log, $moment, $fs, sceneName, scenePath}) => {
+module.exports = async ({$log, $moment, $fs, sceneName, scenePath}) => {
 
     const tubeSites = [ "Pornhub", "XHamster", "Xvideos", "YouPorn"];
     const isTubeFile = tubeSites.some(site => scenePath.toLowerCase().includes(site.toLowerCase()));
